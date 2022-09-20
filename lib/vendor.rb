@@ -1,18 +1,27 @@
 class Vendor
-  attr_reader :vendor_name, :inventory
+  attr_reader :name, :inventory
 
-  def initialize(vendor_name)
-    @vendor_name = vendor_name
-    @inventory = []
+  def initialize(name)
+    @name = name
+    @inventory = Hash.new(0)
   end
 
   def check_stock(item)
-    item.amount
+    @inventory[item]
   end
 
   def stock(item, amount)
-    @item = Item.new({name: @name, price: @price, amount: @amount})
-    @inventory << item
-    item
+    if @inventory[item] == nil
+      @inventory[item] = amount
+    else
+      @inventory[item] += amount
+      # @inventory[item] += quantity
+    end
+  end
+
+  def potential_revenue
+    @inventory.sum do |item, amount|
+      item.price * amount
+    end
   end
 end
